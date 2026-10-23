@@ -60,7 +60,7 @@ The system is composed of multiple integrated subsystems working together in an 
 
 ## Results
 
-- ~92% pollinator classification accuracy on held-out test set
+- ~98% overall pollinator detection and classification accuracy on test set
 - Reliable real-time detection pipeline with low latency
 - Stable sensor fusion logic across LiDAR and camera
 - Successful full system integration and deployment testing
