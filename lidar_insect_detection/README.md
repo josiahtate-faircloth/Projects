@@ -69,7 +69,7 @@ The system is composed of multiple integrated subsystems working together in an 
 
 # Agripollinate Pi Program (This folder)
 
-This folder contains the Raspberry Pi master-side runtime for flower-visit event detection, image capture, and bidirectional packet routing between image and LiDAR clients. This secion describes only the code included in this foder, which was developed by me, Josiah Faircloth, with only minor modifications by teammates where noted.
+This folder contains the Raspberry Pi master-side runtime for flower-visit event detection, image capture, and bidirectional packet routing between image and LiDAR clients. This secion describes only the code included in this folder, which was developed by me, Josiah Faircloth, with only minor modifications by teammates where noted.
 
 ## Program Structure
 
