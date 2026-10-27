@@ -1,8 +1,8 @@
-﻿# Pollination Monitoring System (AgriPollinate)
+﻿# Pollination Monitoring System (Agripollinate)
 
 ## Overview
 
-I worked with a team of 4 on my senior design capstone project to develop Agripollinate. Here is provided a general overview of the project as a whole, including the contributions of myself and my teamates. This folder includes exclusively the code that I developed in my role in the project which is detailed more specifically below.
+I worked with a team of 4 on my senior design capstone project to develop Agripollinate. Here is provided a general overview of the project as a whole, including the contributions of myself and my teammates. This folder includes exclusively the code that I developed in my role in the project which is detailed more specifically below.
 
 Agripollinate is a smart pollination monitoring system designed to help farmers track pollinator activity in real time. Traditional monitoring methods are manual, slow, and not scalable. This system automates the process using LiDAR sensing, image-based machine learning, and live dashboard visualization.
 
@@ -49,7 +49,7 @@ The system is composed of multiple integrated subsystems working together in an 
 ## Hardware
 
 - Raspberry Pi 5
-- LiDAR sensor module
+- SICK TiM561 LiDAR sensor module
 - Camera module
 - Custom PCB
 - Solar power management system
@@ -61,7 +61,7 @@ The system is composed of multiple integrated subsystems working together in an 
 ## Results
 
 - ~98% overall pollinator detection and classification accuracy on test set
-- Reliable real-time detection pipeline with low latency
+- Mean end to end pipeline latency of 4.1 s (movement detected -> classification -> dashboard updated)
 - Stable sensor fusion logic across LiDAR and camera
 - Successful full system integration and deployment testing
 
@@ -69,7 +69,7 @@ The system is composed of multiple integrated subsystems working together in an 
 
 # Agripollinate Pi Program (This folder)
 
-This folder contains the Raspberry Pi master-side runtime for flower-visit event detection, image capture, and bidirectional packet routing between image and LiDAR clients. Developed by me, Josiah Faircloth
+This folder contains the Raspberry Pi master-side runtime for flower-visit event detection, image capture, and bidirectional packet routing between image and LiDAR clients. This secion describes only the code included in this foder, which was developed by me, Josiah Faircloth, with only minor modifications by teammates where noted.
 
 ## Program Structure
 
@@ -80,6 +80,13 @@ The system operates as an event-driven, flower-centric pipeline:
 3. Event start triggers image burst capture/transmission.
 4. Event end packages visit data for LiDAR data client transmission.
 5. Master forwards response packets between image and LiDAR clients using a shared protocol.
+
+## Pi Program results
+- Mean transmissioin latency of 197 ms
+- Continuous memory management reduces required data storage to 7.4 MB
+- Auto TCP reconnect protocol verified in full system tests
+- Automatic fault management behavior verified in full system tests
+- Detection hit rate is 99% for sufficiently sized objects within operating range of 0.4 m
 
 ## Files
 
@@ -139,15 +146,15 @@ Master_Main Requires some user input on program statup but is designed to run sm
 1. LiDAR Scanner connection is established
      - If a timeout or connection failure occurs the user will be asked if connection should be skipped
      - Yes -> Program will continue in TESTING mode without a scanner connected. Further connections will proceed as normal
-     - No -> retry conncection
+     - No -> retry connection
 
-2. If Scanner is connected sucessfully, User is asked if auto flower config should be performed
+2. If Scanner is connected successfully, User is asked if auto flower config should be performed
      - Yes -> Flower setup function runs
            -> each detected flower will require confirmation
      - No -> default Flower setup data is used
 
 3. Image Server is launched, client connected
-     - listens indefinetely untill a connection is made
+     - listens indefinitely until a connection is made
 
 4. LiDAR Data Server is launched
      - If a timeout or connection failure occurs the user will be asked if connection should be skipped
@@ -156,14 +163,19 @@ Master_Main Requires some user input on program statup but is designed to run sm
 
 5. Parsing begins
      - If TESTING mode -> Program will simply wait for user input to simulate an event
-     - If not TESTING mode -> Program will begin parsing lidar data in real time, events may now be triggered by placeing an object in front of configured flowers
+     - If not TESTING mode -> Program will begin parsing lidar data in real time, events may now be triggered by placing an object in front of configured flowers
 
 6. Automatic Connection handling
      - At this point, the program can run without user interference. Any disconnections from the Image Client, 
           LiDAR Data Client, or LiDAR Scanner will be handled automatically with smooth reconnect
 
 ```
+## Configuration
 
+All relevant parameters can be edited at the beginning of master_main.py including:
+- IP address and port of the LiDAR scanner, image client, and LiDAR data client
+- Setup wait times and watchdog time
+- Detection algorithm parameters
 
 ## Running
 
